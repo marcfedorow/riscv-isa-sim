@@ -233,7 +233,7 @@ private:
 #define dirty_vs_state  dirty_mstatus(MSTATUS_VS)
 #define DO_WRITE_FREG(reg, value) (STATE.FPR.write(reg, value), dirty_fp_state)
 #define WRITE_FRD(value) WRITE_FREG(insn.rd(), value)
- 
+
 #define SHAMT (insn.i_imm() & 0x3F)
 #define BRANCH_TARGET (pc + insn.sb_imm())
 #define JUMP_TARGET (pc + insn.uj_imm())
@@ -641,7 +641,7 @@ static inline bool is_aligned(const unsigned val, const unsigned pos)
   reg_t rd_num = insn.rd(); \
   reg_t rs1_num = insn.rs1(); \
   reg_t rs2_num = insn.rs2(); \
-  for (reg_t i=P.VU.vstart; i<vl; ++i){ 
+  for (reg_t i=P.VU.vstart; i<vl; ++i){
 
 #define VI_LOOP_BASE \
     VI_GENERAL_LOOP_BASE \
@@ -656,7 +656,7 @@ static inline bool is_aligned(const unsigned val, const unsigned pos)
   if (vl > 0) { \
     vd_0_des = vd_0_res; \
   } \
-  P.VU.vstart = 0; 
+  P.VU.vstart = 0;
 
 #define VI_LOOP_CMP_BASE \
   require(P.VU.vsew >= e8 && P.VU.vsew <= e64); \
@@ -966,7 +966,7 @@ static inline bool is_aligned(const unsigned val, const unsigned pos)
     VXI_PARAMS(e64); \
     BODY; \
   } \
-  VI_LOOP_END 
+  VI_LOOP_END
 
 // reduction loop - signed
 #define VI_LOOP_REDUCTION_BASE(x) \
@@ -1048,7 +1048,7 @@ static inline bool is_aligned(const unsigned val, const unsigned pos)
     VV_U_PARAMS(e64); \
     BODY; \
   } \
-  VI_LOOP_END 
+  VI_LOOP_END
 
 #define VI_VV_LOOP(BODY) \
   VI_CHECK_SSS(true) \
@@ -1066,7 +1066,7 @@ static inline bool is_aligned(const unsigned val, const unsigned pos)
     VV_PARAMS(e64); \
     BODY; \
   } \
-  VI_LOOP_END 
+  VI_LOOP_END
 
 #define VI_VX_ULOOP(BODY) \
   VI_CHECK_SSS(false) \
@@ -1084,7 +1084,7 @@ static inline bool is_aligned(const unsigned val, const unsigned pos)
     VX_U_PARAMS(e64); \
     BODY; \
   } \
-  VI_LOOP_END 
+  VI_LOOP_END
 
 #define VI_VX_LOOP(BODY) \
   VI_CHECK_SSS(false) \
@@ -1102,7 +1102,7 @@ static inline bool is_aligned(const unsigned val, const unsigned pos)
     VX_PARAMS(e64); \
     BODY; \
   } \
-  VI_LOOP_END 
+  VI_LOOP_END
 
 #define VI_VI_ULOOP(BODY) \
   VI_CHECK_SSS(false) \
@@ -1120,7 +1120,7 @@ static inline bool is_aligned(const unsigned val, const unsigned pos)
     VI_U_PARAMS(e64); \
     BODY; \
   } \
-  VI_LOOP_END 
+  VI_LOOP_END
 
 #define VI_VI_LOOP(BODY) \
   VI_CHECK_SSS(false) \
@@ -1138,7 +1138,7 @@ static inline bool is_aligned(const unsigned val, const unsigned pos)
     VI_PARAMS(e64); \
     BODY; \
   } \
-  VI_LOOP_END 
+  VI_LOOP_END
 
 // narrow operation loop
 #define VI_VV_LOOP_NARROW(BODY) \
@@ -1154,7 +1154,7 @@ if (sew == e8){ \
   VI_NARROW_SHIFT(e32, e64) \
   BODY; \
 } \
-VI_LOOP_END 
+VI_LOOP_END
 
 #define VI_NARROW_SHIFT(sew1, sew2) \
   type_usew_t<sew1>::type &vd = P.VU.elt<type_usew_t<sew1>::type>(rd_num, i, true); \
@@ -1162,7 +1162,7 @@ VI_LOOP_END
   type_usew_t<sew1>::type zimm5 = (type_usew_t<sew1>::type)insn.v_zimm5(); \
   type_sew_t<sew2>::type vs2 = P.VU.elt<type_sew_t<sew2>::type>(rs2_num, i); \
   type_sew_t<sew1>::type vs1 = P.VU.elt<type_sew_t<sew1>::type>(rs1_num, i); \
-  type_sew_t<sew1>::type rs1 = (type_sew_t<sew1>::type)RS1; 
+  type_sew_t<sew1>::type rs1 = (type_sew_t<sew1>::type)RS1;
 
 #define VI_VVXI_LOOP_NARROW(BODY, is_vs1) \
   VI_CHECK_SDS(is_vs1); \
@@ -1593,7 +1593,7 @@ VI_LOOP_BASE \
 VI_LOOP_END
 
 //
-// vector: load/store helper 
+// vector: load/store helper
 //
 #define VI_STRIP(inx) \
   reg_t vreg_inx = inx;
@@ -1820,7 +1820,7 @@ for (reg_t i = 0; i < P.VU.vlmax && P.VU.vl != 0; ++i) { \
   P.VU.vstart = 0;
 
 //
-// vector: amo 
+// vector: amo
 //
 #define VI_AMO(op, type, idx_type) \
   require_vector(false); \
@@ -1915,7 +1915,7 @@ for (reg_t i = 0; i < P.VU.vlmax && P.VU.vl != 0; ++i) { \
       default: \
         break; \
     } \
-  VI_LOOP_END 
+  VI_LOOP_END
 
 //
 // vector: vfp helper
@@ -2770,7 +2770,7 @@ for (reg_t i = 0; i < P.VU.vlmax && P.VU.vl != 0; ++i) { \
 
 #define P_LOOP_END() \
   } \
-  WRITE_RD(rd_tmp);
+  WRITE_RD(sext_xlen(rd_tmp));
 
 #define P_PAIR_LOOP_END() \
   } \
@@ -2778,7 +2778,7 @@ for (reg_t i = 0; i < P.VU.vlmax && P.VU.vl != 0; ++i) { \
     WRITE_RD_PAIR(rd_tmp); \
   } \
   else { \
-    WRITE_RD(rd_tmp); \
+    WRITE_RD(sext_xlen(rd_tmp));
   }
 
 #define P_REDUCTION_LOOP_END(BIT, IS_SAT) \
@@ -2789,7 +2789,7 @@ for (reg_t i = 0; i < P.VU.vlmax && P.VU.vl != 0; ++i) { \
     type_usew_t<BIT>::type pd = pd_res; \
     WRITE_PD(); \
   } \
-  WRITE_RD(rd_tmp);
+  WRITE_RD(sext_xlen(rd_tmp));
 
 #define P_REDUCTION_ULOOP_END(BIT, IS_SAT) \
     } \
@@ -2799,7 +2799,7 @@ for (reg_t i = 0; i < P.VU.vlmax && P.VU.vl != 0; ++i) { \
     type_usew_t<BIT>::type pd = pd_res; \
     WRITE_PD(); \
   } \
-  WRITE_RD(rd_tmp);
+  WRITE_RD(sext_xlen(rd_tmp));
 
 #define P_SUNPKD8(X, Y) \
   require_extension('P'); \
@@ -2815,7 +2815,7 @@ for (reg_t i = 0; i < P.VU.vlmax && P.VU.vl != 0; ++i) { \
   } else { \
     memcpy(&rd_tmp, pd, 4); \
   } \
-  WRITE_RD(rd_tmp);
+  WRITE_RD(sext_xlen(rd_tmp));
 
 #define P_ZUNPKD8(X, Y) \
   require_extension('P'); \
@@ -2831,7 +2831,7 @@ for (reg_t i = 0; i < P.VU.vlmax && P.VU.vl != 0; ++i) { \
   } else { \
     memcpy(&rd_tmp, pd, 4); \
   } \
-  WRITE_RD(rd_tmp);
+  WRITE_RD(sext_xlen(rd_tmp));
 
 #define P_PK(BIT, X, Y) \
   require_extension('P'); \
@@ -2843,7 +2843,7 @@ for (reg_t i = 0; i < P.VU.vlmax && P.VU.vl != 0; ++i) { \
     rd_tmp = set_field(rd_tmp, make_mask64((i * 2 + 1) * BIT, BIT), \
       P_UFIELD(RS1, i * 2 + X, BIT)); \
   } \
-  WRITE_RD(rd_tmp);
+  WRITE_RD(sext_xlen(rd_tmp));
 
 #define P_64_PROFILE_BASE() \
   require_extension('P'); \
@@ -2900,7 +2900,7 @@ for (reg_t i = 0; i < P.VU.vlmax && P.VU.vl != 0; ++i) { \
   if (xlen == 32) { \
     WRITE_RD_PAIR(rd); \
   } else { \
-    WRITE_RD(rd); \
+    WRITE_RD(sext_xlen(rd)); \
   }
 
 #define DEBUG_START             0x0
